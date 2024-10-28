@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import  Button  from "./Button/Button";
 
 function QuizList() {
   const themeList = [
@@ -26,9 +27,7 @@ function QuizList() {
       <ul className="list">
         {themeList.map((theme) => (
           <li key={theme.id} title={theme.title} className="theme">
-            <button className="btn" onClick={() => getQuestions(theme.id)}>
-              {theme.title}
-            </button>
+            <Button onClick={() => getQuestions(theme.id)}>{theme.title}</Button>
           </li>
         ))}
       </ul>

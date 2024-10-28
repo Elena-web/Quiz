@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import  Button  from "./Button/Button";
+import  ButtonAnswer  from "./ButtonAnswer/ButtonAnswer";
 
 function QuizPage() {
   const [data, setData] = useState(null);
@@ -85,10 +87,9 @@ function QuizPage() {
     <>
       <h2>{data.name}</h2>
       <div className="block">
-        <form className="form">
-          {currentIndex < data.questions.length ? (
-            <>
-              <div className="progress-bar">
+        {currentIndex < data.questions.length ? (
+          <form className="form">
+            <div className="progress-bar">
                 <span
                   style={{ width: `${progressPercentage}%` }}
                   className="gradient"
@@ -100,19 +101,15 @@ function QuizPage() {
               <div>
                 {data.questions[currentIndex].options.map(
                   (item, optionIndex) => (
-                    <button
-                      type="submit"
-                      className="form__btn"
-                      key={optionIndex}
-                      value={item}
-                      onClick={handleQuizPage}
-                    >
-                      {item}
-                    </button>
+                    <ButtonAnswer
+                    key={optionIndex}
+                    value={item}
+                    onClick={handleQuizPage}>{item}
+                    </ButtonAnswer>
                   )
                 )}
               </div>
-            </>
+          </form>
           ) : (
             <>
               {result ? ( // Проверка на наличие результата
@@ -122,12 +119,9 @@ function QuizPage() {
               ) : (
                 <p>Загрузка результата...</p>
               )}
-              <button type="button" className="btn" onClick={resetResult}>
-                Играть снова
-              </button>
+              <Button onClick={resetResult}>Играть снова</Button>
             </>
           )}
-        </form>
       </div>
     </>
   );
