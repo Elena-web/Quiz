@@ -40,6 +40,7 @@ function QuizPage() {
 
     // Проверяю, если это последний вопрос
     if (nextIndex === data.questions.length - 1) {
+      console.log(answers);
       handleSubmit(); // Вызываю функцию отправки результатов
     } else {
       setCurrentIndex(nextIndex); // Переход к следующему вопросу

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 function ButtonAnswer({ value, onClick, type = 'submit' }) {
     return (
         <ButtonAnswerComponent
+        value= { value }
         onClick={onClick}
         type={type}>{ value }
         </ButtonAnswerComponent>
