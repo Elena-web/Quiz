@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
-import QuizList from './components/quizList'
-import QuizPage from './components/quizPage'
+import QuizList from './components/QuizList'
+import QuizPage from './components/QuizPage'
 
 function App() {
     return (

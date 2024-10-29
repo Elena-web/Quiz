@@ -1,32 +1,17 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import  Button  from "./Button/Button";
-import  ButtonAnswer  from "./ButtonAnswer/ButtonAnswer";
+import { useState } from "react";
+import Button from "./Button/Button";
+import ButtonAnswer from "./ButtonAnswer/ButtonAnswer";
+import { useGetQuestionsQuery, useAddAnswersMutation } from "../features/question/questionsSlice";
 
 function QuizPage() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [result, setResult] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetch(`https://peppercoding.ru/quiz/${id}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error, please try again");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  }, [id]);
+  const { data, error, isLoading } = useGetQuestionsQuery(id);
+  const [addAnswers] = useAddAnswersMutation();
 
   const handleQuizPage = (event) => {
     event.preventDefault();
@@ -40,45 +25,35 @@ function QuizPage() {
 
     // Проверяю, если это последний вопрос
     if (nextIndex === data.questions.length - 1) {
-      console.log(answers);
       handleSubmit(); // Вызываю функцию отправки результатов
     } else {
       setCurrentIndex(nextIndex); // Переход к следующему вопросу
     }
   };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-  if (!data || !data.questions) {
+  if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
   }
 
   //Отправка ответов на сервер
   const handleSubmit = async () => {
     try {
-      let response = await fetch(`https://peppercoding.ru/quiz/${id}/submit`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({ answers }), // Отправляю массив ответов
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      let result = await response.json();
-      setResult(result); // Отображаю сообщение от сервера
+      const result = await addAnswers({ id, answers }).unwrap(); // Передаю id и answers
+      setResult(result);
     } catch (error) {
-      console.error("Error:", error); // Логирую ошибку
+      console.error("Error:", error);
     }
   };
+
   // Заполнение прогрессбара
   const progressPercentage = (currentIndex / (data.questions.length - 1)) * 100;
 
   // Сброс результатов
   const resetResult = () => {
-    setData(null);
     setAnswers([]);
     setResult(null);
     navigate(`/`);
@@ -91,38 +66,38 @@ function QuizPage() {
         {currentIndex < data.questions.length ? (
           <form className="form">
             <div className="progress-bar">
-                <span
-                  style={{ width: `${progressPercentage}%` }}
-                  className="gradient"
-                ></span>
-              </div>
-              <p className="txt question">
-                {currentIndex + 1}. {data.questions[currentIndex].question}
-              </p>
-              <div>
-                {data.questions[currentIndex].options.map(
-                  (item, optionIndex) => (
-                    <ButtonAnswer
-                    key={optionIndex}
-                    value={item}
-                    onClick={handleQuizPage}>{item}
-                    </ButtonAnswer>
-                  )
-                )}
-              </div>
+              <span
+                style={{ width: `${progressPercentage}%` }}
+                className="gradient"
+              ></span>
+            </div>
+            <p className="txt question">
+              {currentIndex + 1}. {data.questions[currentIndex].question}
+            </p>
+            <div>
+              {data.questions[currentIndex].options.map((item, optionIndex) => (
+                <ButtonAnswer
+                  key={optionIndex}
+                  value={item}
+                  onClick={handleQuizPage}
+                >
+                  {item}
+                </ButtonAnswer>
+              ))}
+            </div>
           </form>
-          ) : (
-            <>
-              {result ? ( // Проверка на наличие результата
-                <p className="txt">
-                  Вы отгадали: {result.score}/{result.total}
-                </p>
-              ) : (
-                <p>Загрузка результата...</p>
-              )}
-              <Button onClick={resetResult}>Играть снова</Button>
-            </>
-          )}
+        ) : (
+          <>
+            {result ? ( // Проверка на наличие результата
+              <p className="txt">
+                Вы отгадали: {result.score}/{result.total}
+              </p>
+            ) : (
+              <p>Загрузка результата...</p>
+            )}
+            <Button onClick={resetResult}>Играть снова</Button>
+          </>
+        )}
       </div>
     </>
   );
