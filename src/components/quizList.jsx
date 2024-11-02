@@ -27,7 +27,15 @@ function QuizList() {
       <ul className="list">
         {themeList.map((theme) => (
           <li key={theme.id} title={theme.title} className="theme">
-            <Button width='255' onClick={() => getQuestions(theme.id)}>{theme.title}</Button>
+            <Button
+            width='255'
+            isBorder={false}
+            borderRadius = 'M'
+            isPurple
+            color={false}
+            secondary
+            marginBottom='0'
+            onClick={() => getQuestions(theme.id)}>{theme.title}</Button>
           </li>
         ))}
       </ul>

@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "./Button/Button";
-import ButtonAnswer from "./ButtonAnswer/ButtonAnswer";
 import { useGetQuestionsQuery, useAddAnswersMutation } from "../features/question/questionsSlice";
 
 function QuizPage() {
@@ -76,13 +75,15 @@ function QuizPage() {
             </p>
             <div>
               {data.questions[currentIndex].options.map((item, optionIndex) => (
-                <ButtonAnswer
-                  key={optionIndex}
-                  value={item}
-                  onClick={handleQuizPage}
-                >
-                  {item}
-                </ButtonAnswer>
+                <Button
+                key={optionIndex}
+                value={item}
+                isBlock = {true}
+                answer
+                marginBottom='15'
+                type= 'submit'
+                onClick={handleQuizPage}
+                >{item}</Button>
               ))}
             </div>
           </form>
@@ -95,7 +96,15 @@ function QuizPage() {
             ) : (
               <p>Загрузка результата...</p>
             )}
-            <Button onClick={resetResult}>Играть снова</Button>
+            <Button
+              width='255'
+              isBorder={false}
+              borderRadius = 'M'
+              isPurple
+              color={false}
+              secondary
+              onClick={resetResult}>Играть снова
+            </Button>
           </>
         )}
       </div>
