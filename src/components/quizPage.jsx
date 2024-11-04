@@ -79,7 +79,7 @@ function QuizPage() {
                 key={optionIndex}
                 value={item}
                 isBlock = {true}
-                answer
+                isAnswer
                 marginBottom='15'
                 type= 'submit'
                 onClick={handleQuizPage}

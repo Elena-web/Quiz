@@ -8,7 +8,7 @@ export interface IButtonProps {
     isBlock?: boolean
     isBorder?: boolean
     borderRadius: 'S' | 'M'
-    answer?: boolean
+    isAnswer?: boolean
     isPurple?: boolean
     color?: boolean
     secondary?: boolean
@@ -24,7 +24,7 @@ export const Button = ({
     isBlock = false,
     isBorder = true,
     borderRadius = 'S',
-    answer = true,
+    isAnswer = true,
     isPurple = false,
     color = true,
     secondary = false,
@@ -45,7 +45,7 @@ export const Button = ({
           $isBlock={isBlock}
           $isBorder={isBorder}
           $borderRadius={borderRadius}
-          $answer={answer}
+          $isAnswer={isAnswer}
           $isPurple={isPurple}
           $color={color}
           $secondary={secondary}

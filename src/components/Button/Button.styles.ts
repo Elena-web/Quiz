@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled, { css } from 'styled-components';
 
 export const ButtonComponent = styled.button<{
     $isBlock?: boolean
-    width: string
+    width: 'S' | 'M'
     $isBorder?: boolean
     $borderRadius: String
-    $answer: boolean
+    $isAnswer: boolean
     $isPurple?: boolean
     $color?: boolean
     $marginBottom?: string
@@ -20,8 +20,12 @@ export const ButtonComponent = styled.button<{
     height: 48px;
     border:  ${props => props.$isBorder ? '1px solid #dedbdb' : "white"};
     border-radius:  ${props => props.$borderRadius==='S' ? '3px' : '24px'};
-    background: ${props => props.$isPurple ? 'rgb(99, 95, 199)' : "white"};
-    color:  ${props => props.$color ? 'black' : "white"};
+    background-color: #fff;
+    color: #000;
+    ${props => props.$isPurple && css`
+        background: rgb(99, 95, 199);
+        color: 'white';
+        `};
     margin-bottom: ${props => props.$marginBottom}px;
 
     &:hover {
